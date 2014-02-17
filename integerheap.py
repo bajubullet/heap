@@ -17,11 +17,16 @@ class IntegerHeap(object):
         return
     # check left and right
     left, right = self.get_left(i), self.get_right(i)
-    if left < len(self.data) and self.data[left] > self.data[i]:
-      self.data[left], self.data[i] = self.data[i], self.data[left]
-      self.heapify(left)
+    try:
+      leftEl, rightEl = self.data[left], self.data[right]
+    except IndexError:
       return
-    if right < len(self.data) and self.data[right] > self.data[i]:
+    if leftEl > rightEl:
+      if self.data[i] < leftEl:
+        self.data[left], self.data[i] = self.data[i], self.data[left]
+        self.heapify(left)
+        return
+    if rightEl > self.data[i]:
       self.data[right], self.data[i] = self.data[i], self.data[right]
       self.heapify(right)
       return
@@ -36,6 +41,15 @@ class IntegerHeap(object):
   def get_right(self, i):
     return self.get_left(i) + 1
 
+  def delete(self, i):
+    length = len(self.data)
+    if i == length - 1:
+      del self.data[i]
+      return
+    self.data[i], self.data[length-1] = self.data[length-1], self.data[i]
+    del self.data[length-1]
+    self.heapify(i)
+
 import random
 asd = IntegerHeap()
 data = range(50)
@@ -43,4 +57,14 @@ random.shuffle(data)
 for i in data:
   asd.insert(i)
 
+print asd.data
+asd.delete(0)
+print asd.data
+asd.delete(0)
+print asd.data
+asd.delete(0)
+print asd.data
+asd.delete(0)
+print asd.data
+asd.delete(0)
 print asd.data
